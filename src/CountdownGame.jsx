@@ -1,6 +1,8 @@
 import React from "react";
 import styled from "styled-components";
 
+import Board from "./Board";
+
 const H2 = styled.h2`
 	font-family: sans-serif;
 	font-weight: 300;
@@ -20,6 +22,7 @@ export default function CountdownGame() {
 		<div>
 			<H2>Create the word by dragging letters into the empty boxes</H2>
 			<H4>You have one minute</H4>
+			<Board />
 		</div>
 	);
 }
