@@ -1,6 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 import PropTypes from "prop-types";
+import LetterPiece from "./LetterPiece";
 
 const ContainerDiv = styled.div`
 	margin: 10px;
@@ -8,8 +9,6 @@ const ContainerDiv = styled.div`
 	border-style: solid;
 	color: #333;
 	display: inline-block;
-	font-family: monospace;
-	font-size: 32px;
 	text-align: center;
 	min-height: 60px;
 	min-width: 50px;
@@ -19,26 +18,32 @@ const onDragOver = (event) => {
 	event.preventDefault();
 };
 
-const onDrop = (event) => {
-	const letter = event.dataTransfer.getData("letter");
-	console.log(letter);
-};
+export default function PieceContainer({ letter, isGuessed, onPutHandler }) {
+	const onDropHandler = (event) => {
+		const piece = JSON.parse(event.dataTransfer.getData("text"));
+		console.log(piece);
+		if (isGuessed) {
+			onPutHandler(event);
+		}
+	};
 
-export default function PieceContainer({ children }) {
 	return (
 		<ContainerDiv
 			onDragOver={(event) => onDragOver(event)}
-			onDrop={(event) => onDrop(event)}
+			onDrop={(event) => onDropHandler(event, letter, isGuessed)}
 		>
-			{children}
+			<LetterPiece letter={letter} isDraggable={!isGuessed} isGuessed />
 		</ContainerDiv>
 	);
 }
 
 PieceContainer.propTypes = {
-	children: PropTypes.node,
+	letter: PropTypes.string.isRequired,
+	isGuessed: PropTypes.bool,
+	onPutHandler: PropTypes.func,
 };
 
 PieceContainer.defaultProps = {
-	children: null,
+	isGuessed: false,
+	onPutHandler: null,
 };

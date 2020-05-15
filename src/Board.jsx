@@ -1,6 +1,5 @@
 import React from "react";
 import styled from "styled-components";
-import LetterPiece from "./LetterPiece";
 import PieceContainer from "./PieceContainer";
 
 const CenteredDiv = styled.div`
@@ -13,34 +12,41 @@ export default class Board extends React.Component {
 		this.state = {
 			letters: {
 				available: ["W", "Y", "D", "E", "I", "L", "W", "H", "E"],
-				guessed: Array(5).fill(null),
+				characters: 5,
 			},
 		};
 	}
 
+	renderWord = (characters) => {
+		const word = [];
+		for (let i = 0; i < characters; i += 1) {
+			word.push(
+				<PieceContainer
+					onPutHandler={this.onDropHandler}
+					letter={null}
+					isGuessed
+				/>
+			);
+		}
+		return word;
+	};
+
+	onDropHandler = (event) => {
+		const piece = JSON.parse(event.dataTransfer.getData("text"));
+		console.log(piece);
+	};
+
 	render() {
 		const { letters } = this.state;
-		const { available, guessed } = letters;
+		const { available, characters } = letters;
 		return (
 			<div>
 				<CenteredDiv>
 					{available.map((letter) => {
-						return (
-							<PieceContainer>
-								<LetterPiece letter={letter}>A</LetterPiece>
-							</PieceContainer>
-						);
+						return <PieceContainer letter={letter} isGuessed={false} />;
 					})}
 				</CenteredDiv>
-				<CenteredDiv>
-					{guessed.map((letter) => {
-						let piece;
-						if (letter) {
-							piece = <LetterPiece letter={letter}>A</LetterPiece>;
-						}
-						return <PieceContainer>{piece}</PieceContainer>;
-					})}
-				</CenteredDiv>
+				<CenteredDiv>{this.renderWord(characters)}</CenteredDiv>
 			</div>
 		);
 	}
