@@ -1,21 +1,10 @@
 import React from "react";
 import styled from "styled-components";
+import LetterPiece from "./LetterPiece";
+import PieceContainer from "./PieceContainer";
 
 const CenteredDiv = styled.div`
 	text-align: center;
-`;
-
-const ContainerDiv = styled.div`
-	margin: 10px;
-	border-color: ${(props) => props.theme.primary};
-	border-style: solid;
-	color: #333;
-	display: inline-block;
-	font-family: monospace;
-	font-size: 32px;
-	text-align: center;
-	min-height: 60px;
-	min-width: 50px;
 `;
 
 export default class Board extends React.Component {
@@ -23,7 +12,7 @@ export default class Board extends React.Component {
 		super(props);
 		this.state = {
 			letters: {
-				available: Array(9).fill(null),
+				available: ["W", "Y", "D", "E", "I", "L", "W", "H", "E"],
 				guessed: Array(5).fill(null),
 			},
 		};
@@ -36,12 +25,20 @@ export default class Board extends React.Component {
 			<div>
 				<CenteredDiv>
 					{available.map((letter) => {
-						return <ContainerDiv> A </ContainerDiv>;
+						return (
+							<PieceContainer>
+								<LetterPiece letter={letter}>A</LetterPiece>
+							</PieceContainer>
+						);
 					})}
 				</CenteredDiv>
 				<CenteredDiv>
 					{guessed.map((letter) => {
-						return <ContainerDiv> A </ContainerDiv>;
+						let piece;
+						if (letter) {
+							piece = <LetterPiece letter={letter}>A</LetterPiece>;
+						}
+						return <PieceContainer>{piece}</PieceContainer>;
 					})}
 				</CenteredDiv>
 			</div>
