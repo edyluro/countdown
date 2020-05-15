@@ -18,6 +18,11 @@ const onDragOver = (event) => {
 	event.preventDefault();
 };
 
+const onDragStartHandler = (event, { letter, isDraggable, isGuessed }) => {
+	const pieceString = JSON.stringify({ letter, isDraggable, isGuessed });
+	event.dataTransfer.setData("text/plain", pieceString);
+};
+
 export default function PieceContainer({ letter, isGuessed, onPutHandler }) {
 	const onDropHandler = (event) => {
 		const piece = JSON.parse(event.dataTransfer.getData("text"));
@@ -32,18 +37,25 @@ export default function PieceContainer({ letter, isGuessed, onPutHandler }) {
 			onDragOver={(event) => onDragOver(event)}
 			onDrop={(event) => onDropHandler(event, letter, isGuessed)}
 		>
-			<LetterPiece letter={letter} isDraggable={!isGuessed} isGuessed />
+			<LetterPiece
+				letter={letter}
+				isDraggable={!isGuessed}
+				isGuessed={isGuessed}
+				isDisabled={isGuessed}
+				onDragStartHandler={onDragStartHandler}
+			/>
 		</ContainerDiv>
 	);
 }
 
 PieceContainer.propTypes = {
-	letter: PropTypes.string.isRequired,
+	letter: PropTypes.string,
 	isGuessed: PropTypes.bool,
 	onPutHandler: PropTypes.func,
 };
 
 PieceContainer.defaultProps = {
+	letter: null,
 	isGuessed: false,
 	onPutHandler: null,
 };

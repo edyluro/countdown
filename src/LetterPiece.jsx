@@ -10,20 +10,23 @@ const LetterDiv = styled.div`
 	text-align: center;
 	min-height: 60px;
 	min-width: 50px;
+	opacity: ${(props) => (props.disabled ? 0.5 : 1)};
 `;
 
-const onDragStart = (event, piece) => {
-	const pieceString = JSON.stringify(piece);
-	event.dataTransfer.setData("text/plain", pieceString);
-};
-
-export default function LetterPiece({ letter, isDraggable, isGuessed }) {
+export default function LetterPiece({
+	letter,
+	isDraggable,
+	isGuessed,
+	isDisabled,
+	onDragStartHandler,
+}) {
 	return (
 		<LetterDiv
 			onDragStart={(event) =>
-				onDragStart(event, { letter, isDraggable, isGuessed })
+				onDragStartHandler(event, { letter, isDraggable, isGuessed })
 			}
 			draggable={isDraggable}
+			disabled={isDisabled}
 		>
 			{letter}
 		</LetterDiv>
@@ -31,12 +34,17 @@ export default function LetterPiece({ letter, isDraggable, isGuessed }) {
 }
 
 LetterPiece.propTypes = {
-	letter: PropTypes.string.isRequired,
+	letter: PropTypes.string,
 	isDraggable: PropTypes.bool,
 	isGuessed: PropTypes.bool,
+	isDisabled: PropTypes.bool,
+	onDragStartHandler: PropTypes.func,
 };
 
 LetterPiece.defaultProps = {
+	letter: null,
+	isDisabled: false,
 	isDraggable: true,
 	isGuessed: false,
+	onDragStartHandler: null,
 };

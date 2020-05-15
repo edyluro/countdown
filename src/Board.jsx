@@ -1,5 +1,6 @@
 import React from "react";
 import styled from "styled-components";
+import PropTypes from "prop-types";
 import PieceContainer from "./PieceContainer";
 
 const CenteredDiv = styled.div`
@@ -9,20 +10,52 @@ const CenteredDiv = styled.div`
 export default class Board extends React.Component {
 	constructor(props) {
 		super(props);
+		const { wordLength } = this.props;
 		this.state = {
 			letters: {
-				available: ["W", "Y", "D", "E", "I", "L", "W", "H", "E"],
-				characters: 5,
+				available: [],
+				guessed: null,
+				characters: wordLength,
 			},
 		};
 	}
+
+	componentDidMount() {
+		this.fillBoard();
+	}
+
+	fillBoard = () => {
+		const { wordToGuess } = this.props;
+		const shuffledWord = this.shuffleWord(wordToGuess);
+		this.setState((prevState) => ({
+			letters: {
+				...prevState.letters,
+				available: shuffledWord,
+			},
+		}));
+	};
+
+	shuffleWord = (word) => {
+		const newWord = `${word}JXQZ`;
+		const wordArray = newWord.split("");
+		return this.shuffleArray(wordArray);
+	};
+
+	shuffleArray = (array) => {
+		const a = array.slice();
+		for (let i = a.length - 1; i > 0; i -= 1) {
+			const j = Math.floor(Math.random() * (i + 1));
+			[a[i], a[j]] = [a[j], a[i]];
+		}
+		return a;
+	};
 
 	renderWord = (characters) => {
 		const word = [];
 		for (let i = 0; i < characters; i += 1) {
 			word.push(
 				<PieceContainer
-					onPutHandler={this.onDropHandler}
+					onPutHandler={this.onPutHandler}
 					letter={null}
 					isGuessed
 				/>
@@ -31,7 +64,7 @@ export default class Board extends React.Component {
 		return word;
 	};
 
-	onDropHandler = (event) => {
+	onPutHandler = (event) => {
 		const piece = JSON.parse(event.dataTransfer.getData("text"));
 		console.log(piece);
 	};
@@ -51,3 +84,8 @@ export default class Board extends React.Component {
 		);
 	}
 }
+
+Board.propTypes = {
+	wordToGuess: PropTypes.string.isRequired,
+	wordLength: PropTypes.number.isRequired,
+};
