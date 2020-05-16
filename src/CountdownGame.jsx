@@ -43,11 +43,28 @@ export default class CountdownGame extends React.Component {
 		this.setState({ status });
 	};
 
+	verifyGuessedWord = (guess) => {
+		const { word, status } = this.state;
+		if (word.length === WORD_LENGTH && status === GAME_STATUS.PROGRESS) {
+			if (guess === word) {
+				this.changeGameStatus(GAME_STATUS.WON);
+			} else {
+				this.changeGameStatus(GAME_STATUS.LOST);
+			}
+		}
+	};
+
 	render() {
 		const { word, status } = this.state;
 		let renderBoard;
 		if (word) {
-			renderBoard = <Board wordToGuess={word} wordLength={WORD_LENGTH} />;
+			renderBoard = (
+				<Board
+					wordToGuess={word}
+					wordLength={WORD_LENGTH}
+					verifyGuessedWord={this.verifyGuessedWord}
+				/>
+			);
 		} else {
 			renderBoard = <div />;
 		}

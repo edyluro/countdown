@@ -38,6 +38,10 @@ export default class Board extends React.Component {
 		this.fillBoard();
 	}
 
+	componentDidUpdate() {
+		this.makeGuess();
+	}
+
 	fillBoard = () => {
 		const { wordToGuess, wordLength } = this.props;
 		const letterArray = shuffleWord(wordToGuess);
@@ -50,6 +54,16 @@ export default class Board extends React.Component {
 				guessed: guessedArray,
 			},
 		}));
+	};
+
+	makeGuess = () => {
+		const { verifyGuessedWord } = this.props;
+		const { letters: { guessed } = {} } = this.state;
+		let guessedWord = "";
+		guessed.forEach(({ letter }) => {
+			guessedWord += letter;
+		});
+		verifyGuessedWord(guessedWord);
 	};
 
 	createAvailableArray = (letterArray) => {
@@ -196,4 +210,5 @@ export default class Board extends React.Component {
 Board.propTypes = {
 	wordToGuess: PropTypes.string.isRequired,
 	wordLength: PropTypes.number.isRequired,
+	verifyGuessedWord: PropTypes.func.isRequired,
 };
