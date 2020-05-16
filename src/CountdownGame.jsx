@@ -25,7 +25,7 @@ const H4 = styled.h4`
 `;
 
 const Img = styled.img`
-	margin-top: 20px;
+	margin: 20px 5px;
 	width: 50px;
 	height: 50px;
 `;
@@ -46,6 +46,7 @@ export default class CountdownGame extends React.Component {
 		this.state = {
 			word: null,
 			status: null,
+			tries: 0,
 		};
 	}
 
@@ -56,7 +57,7 @@ export default class CountdownGame extends React.Component {
 	initializeGame = () => {
 		const randomIndex = Math.floor(Math.random() * DICTIONARY.length);
 		const wordToGuess = DICTIONARY[randomIndex];
-		this.setState({ word: wordToGuess, status: GAME_STATUS.START });
+		this.setState({ word: wordToGuess, status: GAME_STATUS.START, tries: 0 });
 	};
 
 	startGame = () => {
@@ -68,18 +69,24 @@ export default class CountdownGame extends React.Component {
 	};
 
 	verifyGuessedWord = (guess) => {
-		const { word, status } = this.state;
+		const { word, status, tries } = this.state;
 		if (guess.length === WORD_LENGTH && status === GAME_STATUS.PROGRESS) {
 			if (guess === word) {
 				this.setGameStatus(GAME_STATUS.WON);
 			} else {
-				this.setGameStatus(GAME_STATUS.LOST);
+				const newTry = tries + 1;
+				if (newTry >= Constants.MAXIMUM_TRIES) {
+					this.setGameStatus(GAME_STATUS.LOST);
+				} else {
+					this.setGameStatus(GAME_STATUS.FAILED);
+				}
+				this.setState({ tries: newTry });
 			}
 		}
 	};
 
 	render() {
-		const { word, status } = this.state;
+		const { word, status, tries } = this.state;
 		let renderBoard;
 		if (word) {
 			renderBoard = (
@@ -95,21 +102,31 @@ export default class CountdownGame extends React.Component {
 			renderBoard = <div />;
 		}
 
+		const fails = [];
+
+		for (let i = 0; i < tries; i += 1) {
+			fails.push(<Img src={fail} alt="Fail" />);
+		}
+
 		let renderGameStatus;
 		if (status === GAME_STATUS.WON) {
 			renderGameStatus = (
-				<div>
+				<CenteredDiv>
 					<Img src={success} alt="Success" />
-				</div>
+				</CenteredDiv>
 			);
 		}
 		if (status === GAME_STATUS.LOST) {
 			renderGameStatus = (
-				<div>
-					<Img src={fail} alt="Fail" />
+				<CenteredDiv>
+					{fails}
 					<TryAgainH2 onClick={this.initializeGame}>Try Again</TryAgainH2>
-				</div>
+				</CenteredDiv>
 			);
+		}
+
+		if (status === GAME_STATUS.PROGRESS) {
+			renderGameStatus = <CenteredDiv>{fails}</CenteredDiv>;
 		}
 
 		return (

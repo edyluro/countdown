@@ -42,7 +42,35 @@ export default class Board extends React.Component {
 		const { gameStatus } = this.props;
 		if (gameStatus === GAME_STATUS.START) {
 			this.fillBoard();
+		} else if (gameStatus === GAME_STATUS.FAILED) {
+			this.resetGuess();
 		}
+	};
+
+	resetGuess = () => {
+		const { startGameHandler } = this.props;
+		const { letters: { available, guessed } = {} } = this.state;
+		const newAvailableArray = available.map((piece) => {
+			return { ...piece, disableLetter: false };
+		});
+		const newGuessedArray = guessed.map((piece) => {
+			return {
+				...piece,
+				letter: null,
+				parentId: null,
+				disableLetter: true,
+			};
+		});
+		this.setState(
+			(prevState) => ({
+				letters: {
+					...prevState.letters,
+					available: newAvailableArray,
+					guessed: newGuessedArray,
+				},
+			}),
+			startGameHandler
+		);
 	};
 
 	fillBoard = () => {

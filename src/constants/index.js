@@ -38,11 +38,12 @@ export const DICTIONARY = [
 
 export const GAME_STATUS = {
 	PROGRESS: "inProgress",
+	FAILED: "guessFailed",
 	LOST: "gameLost",
-	START: "start",
+	START: "gameStart",
 	WON: "gameWon",
 };
 
 export const LETTERS_AVAILABLE = 9;
-
+export const MAXIMUM_TRIES = 3;
 export const WORD_LENGTH = 5;
