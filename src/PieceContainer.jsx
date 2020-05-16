@@ -2,6 +2,7 @@ import React from "react";
 import styled from "styled-components";
 import PropTypes from "prop-types";
 import LetterPiece from "./LetterPiece";
+import { CONTAINER_TYPE } from "./constants";
 
 const ContainerDiv = styled.div`
 	margin: 10px;
@@ -18,30 +19,39 @@ const onDragOver = (event) => {
 	event.preventDefault();
 };
 
-const onDragStartHandler = (event, { letter, isDraggable, isGuessed }) => {
-	const pieceString = JSON.stringify({ letter, isDraggable, isGuessed });
-	event.dataTransfer.setData("text/plain", pieceString);
-};
+export default function PieceContainer({
+	id,
+	letter,
+	type,
+	disableLetter,
+	onGuessHandler,
+}) {
+	const onDragStartHandler = (event) => {
+		if (disableLetter) {
+			event.preventDefault();
+		} else {
+			const pieceString = JSON.stringify({ id, type });
+			event.dataTransfer.setData("text/plain", pieceString);
+		}
+	};
 
-export default function PieceContainer({ letter, isGuessed, onPutHandler }) {
 	const onDropHandler = (event) => {
-		const piece = JSON.parse(event.dataTransfer.getData("text"));
-		console.log(piece);
-		if (isGuessed) {
-			onPutHandler(event);
+		const draggedPiece = JSON.parse(event.dataTransfer.getData("text"));
+		if (type === CONTAINER_TYPE.GUESSED) {
+			const guessObject = { from: draggedPiece, to: { id, type } };
+			onGuessHandler(guessObject);
 		}
 	};
 
 	return (
 		<ContainerDiv
 			onDragOver={(event) => onDragOver(event)}
-			onDrop={(event) => onDropHandler(event, letter, isGuessed)}
+			onDrop={(event) => onDropHandler(event)}
 		>
 			<LetterPiece
 				letter={letter}
-				isDraggable={!isGuessed}
-				isGuessed={isGuessed}
-				isDisabled={isGuessed}
+				isDraggable={type === CONTAINER_TYPE.AVAILABLE}
+				isDisabled={disableLetter}
 				onDragStartHandler={onDragStartHandler}
 			/>
 		</ContainerDiv>
@@ -49,13 +59,15 @@ export default function PieceContainer({ letter, isGuessed, onPutHandler }) {
 }
 
 PieceContainer.propTypes = {
+	id: PropTypes.string.isRequired,
 	letter: PropTypes.string,
-	isGuessed: PropTypes.bool,
-	onPutHandler: PropTypes.func,
+	type: PropTypes.string.isRequired,
+	disableLetter: PropTypes.bool,
+	onGuessHandler: PropTypes.func,
 };
 
 PieceContainer.defaultProps = {
 	letter: null,
-	isGuessed: false,
-	onPutHandler: null,
+	onGuessHandler: null,
+	disableLetter: false,
 };

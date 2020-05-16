@@ -1,4 +1,10 @@
 /* eslint-disable import/prefer-default-export */
+
+export const CONTAINER_TYPE = {
+	AVAILABLE: "available",
+	GUESSED: "guessed",
+};
+
 export const DICTIONARY = [
 	"ABOUT",
 	"AFTER",

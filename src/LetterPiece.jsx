@@ -11,23 +11,16 @@ const LetterDiv = styled.div`
 	min-height: 60px;
 	min-width: 50px;
 	opacity: ${(props) => (props.disabled ? 0.5 : 1)};
+	cursor: ${(props) => (props.disabled ? "not-allowed" : "grab")};
 `;
 
 export default function LetterPiece({
 	letter,
-	isDraggable,
-	isGuessed,
 	isDisabled,
 	onDragStartHandler,
 }) {
 	return (
-		<LetterDiv
-			onDragStart={(event) =>
-				onDragStartHandler(event, { letter, isDraggable, isGuessed })
-			}
-			draggable={isDraggable}
-			disabled={isDisabled}
-		>
+		<LetterDiv onDragStart={onDragStartHandler} draggable disabled={isDisabled}>
 			{letter}
 		</LetterDiv>
 	);
@@ -35,8 +28,6 @@ export default function LetterPiece({
 
 LetterPiece.propTypes = {
 	letter: PropTypes.string,
-	isDraggable: PropTypes.bool,
-	isGuessed: PropTypes.bool,
 	isDisabled: PropTypes.bool,
 	onDragStartHandler: PropTypes.func,
 };
@@ -44,7 +35,5 @@ LetterPiece.propTypes = {
 LetterPiece.defaultProps = {
 	letter: null,
 	isDisabled: false,
-	isDraggable: true,
-	isGuessed: false,
 	onDragStartHandler: null,
 };
