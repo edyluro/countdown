@@ -6,7 +6,7 @@ import { CONTAINER_TYPE } from "./constants";
 
 const ContainerDiv = styled.div`
 	margin: 10px;
-	border-color: ${(props) => props.theme.primary};
+	border-color: black;
 	border-style: solid;
 	color: #333;
 	display: inline-block;
@@ -52,6 +52,7 @@ export default function PieceContainer({
 				letter={letter}
 				isDraggable={type === CONTAINER_TYPE.AVAILABLE}
 				isDisabled={disableLetter}
+				type={type}
 				onDragStartHandler={onDragStartHandler}
 			/>
 		</ContainerDiv>

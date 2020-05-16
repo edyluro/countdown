@@ -39,6 +39,7 @@ export const DICTIONARY = [
 export const GAME_STATUS = {
 	PROGRESS: "inProgress",
 	LOST: "gameLost",
+	START: "start",
 	WON: "gameWon",
 };
 

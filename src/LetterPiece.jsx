@@ -1,9 +1,13 @@
 import React from "react";
 import styled from "styled-components";
 import PropTypes from "prop-types";
+import { CONTAINER_TYPE } from "./constants";
 
 const LetterDiv = styled.div`
-	color: ${(props) => props.theme.secondary};
+	color: ${(props) =>
+		props.type === CONTAINER_TYPE.AVAILABLE
+			? props.theme.primaryPiece
+			: props.theme.secondaryPiece};
 	display: inline-block;
 	font-family: monospace;
 	font-size: 50px;
@@ -18,9 +22,15 @@ export default function LetterPiece({
 	letter,
 	isDisabled,
 	onDragStartHandler,
+	type,
 }) {
 	return (
-		<LetterDiv onDragStart={onDragStartHandler} draggable disabled={isDisabled}>
+		<LetterDiv
+			onDragStart={onDragStartHandler}
+			draggable
+			disabled={isDisabled}
+			type={type}
+		>
 			{letter}
 		</LetterDiv>
 	);
@@ -29,6 +39,7 @@ export default function LetterPiece({
 LetterPiece.propTypes = {
 	letter: PropTypes.string,
 	isDisabled: PropTypes.bool,
+	type: PropTypes.string.isRequired,
 	onDragStartHandler: PropTypes.func,
 };
 

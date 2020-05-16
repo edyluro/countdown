@@ -2,7 +2,7 @@ import React from "react";
 import styled from "styled-components";
 import PropTypes from "prop-types";
 import PieceContainer from "./PieceContainer";
-import { CONTAINER_TYPE } from "./constants";
+import { CONTAINER_TYPE, GAME_STATUS } from "./constants";
 
 const CenteredDiv = styled.div`
 	text-align: center;
@@ -38,22 +38,28 @@ export default class Board extends React.Component {
 		this.fillBoard();
 	}
 
-	componentDidUpdate() {
-		this.makeGuess();
-	}
+	componentDidUpdate = () => {
+		const { gameStatus } = this.props;
+		if (gameStatus === GAME_STATUS.START) {
+			this.fillBoard();
+		}
+	};
 
 	fillBoard = () => {
-		const { wordToGuess, wordLength } = this.props;
+		const { wordToGuess, wordLength, startGameHandler } = this.props;
 		const letterArray = shuffleWord(wordToGuess);
 		const availableArray = this.createAvailableArray(letterArray);
 		const guessedArray = this.createGuessedArray(wordLength);
-		this.setState((prevState) => ({
-			letters: {
-				...prevState.letters,
-				available: availableArray,
-				guessed: guessedArray,
-			},
-		}));
+		this.setState(
+			(prevState) => ({
+				letters: {
+					...prevState.letters,
+					available: availableArray,
+					guessed: guessedArray,
+				},
+			}),
+			startGameHandler
+		);
 	};
 
 	makeGuess = () => {
@@ -130,13 +136,16 @@ export default class Board extends React.Component {
 					}
 					return piece;
 				});
-				this.setState((prevState) => ({
-					letters: {
-						...prevState.letters,
-						available: newAvailableArray,
-						guessed: newGuessedArray,
-					},
-				}));
+				this.setState(
+					(prevState) => ({
+						letters: {
+							...prevState.letters,
+							available: newAvailableArray,
+							guessed: newGuessedArray,
+						},
+					}),
+					this.makeGuess
+				);
 			} else {
 				const newGuessedArray = guessed.map((piece) => {
 					if (piece.id === pieceFrom.id) {
@@ -208,7 +217,9 @@ export default class Board extends React.Component {
 }
 
 Board.propTypes = {
+	gameStatus: PropTypes.string.isRequired,
 	wordToGuess: PropTypes.string.isRequired,
 	wordLength: PropTypes.number.isRequired,
 	verifyGuessedWord: PropTypes.func.isRequired,
+	startGameHandler: PropTypes.func.isRequired,
 };
