@@ -2,6 +2,7 @@ import React from "react";
 import styled from "styled-components";
 
 import Board from "./Board";
+import Timer from "./Timer";
 import * as Constants from "./constants";
 import fail from "./assets/fail.png";
 import success from "./assets/success.png";
@@ -85,6 +86,10 @@ export default class CountdownGame extends React.Component {
 		}
 	};
 
+	timeUpHandler = () => {
+		this.setState({ tries: 1, status: GAME_STATUS.LOST });
+	};
+
 	render() {
 		const { word, status, tries } = this.state;
 		let renderBoard;
@@ -106,6 +111,13 @@ export default class CountdownGame extends React.Component {
 
 		for (let i = 0; i < tries; i += 1) {
 			fails.push(<Img src={fail} alt="Fail" />);
+		}
+
+		let renderTimer;
+		if (status === GAME_STATUS.START) {
+			renderTimer = null;
+		} else {
+			renderTimer = <Timer timeUpHandler={this.timeUpHandler} />;
 		}
 
 		let renderGameStatus;
@@ -131,6 +143,7 @@ export default class CountdownGame extends React.Component {
 
 		return (
 			<CenteredDiv>
+				{renderTimer}
 				<H2>Create the word by dragging letters into the empty boxes</H2>
 				<H4>You have one minute</H4>
 				{renderBoard}

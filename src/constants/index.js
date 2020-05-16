@@ -46,4 +46,5 @@ export const GAME_STATUS = {
 
 export const LETTERS_AVAILABLE = 9;
 export const MAXIMUM_TRIES = 3;
+export const MAXIMUM_SECONDS = 60;
 export const WORD_LENGTH = 5;
