@@ -95,5 +95,9 @@ export default class Timer extends React.Component {
 
 Timer.propTypes = {
 	timeUpHandler: PropTypes.func.isRequired,
-	gameStatus: PropTypes.string.isRequired,
+	gameStatus: PropTypes.string,
+};
+
+Timer.defaultProps = {
+	gameStatus: null,
 };

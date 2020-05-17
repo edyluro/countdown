@@ -114,7 +114,7 @@ export default class CountdownGame extends React.Component {
 		const fails = [];
 
 		for (let i = 0; i < tries; i += 1) {
-			fails.push(<Img src={fail} alt="Fail" />);
+			fails.push(<Img key={i} src={fail} alt="Fail" />);
 		}
 
 		let renderGameStatus;
