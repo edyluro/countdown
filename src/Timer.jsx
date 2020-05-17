@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 import PropTypes from "prop-types";
-import { MAXIMUM_SECONDS } from "./constants";
+import { GAME_STATUS, MAXIMUM_SECONDS } from "./constants";
 
 const TimerH1 = styled.h1`
 	font-family: sans-serif;
@@ -28,7 +28,22 @@ export default class Timer extends React.Component {
 		};
 	}
 
-	componentDidMount() {
+	componentDidUpdate(prevProps) {
+		const { gameStatus } = this.props;
+		if (gameStatus !== prevProps.gameStatus) {
+			if (gameStatus === GAME_STATUS.START) {
+				this.resetTimer();
+			} else if (gameStatus === GAME_STATUS.WON || gameStatus === GAME_STATUS.LOST) {
+				this.stopTimer();
+			}
+		}
+	}
+
+	componentWillUnmount() {
+		clearInterval(this.interval);
+	}
+
+	startTimer = () => {
 		const { timeUpHandler } = this.props;
 		this.interval = setInterval(() => {
 			const { remainingTime } = this.state;
@@ -49,11 +64,22 @@ export default class Timer extends React.Component {
 				);
 			}
 		}, 1000);
-	}
+	};
 
-	componentWillUnmount() {
+	stopTimer = () => {
 		clearInterval(this.interval);
-	}
+	};
+
+	resetTimer = () => {
+		clearInterval(this.interval);
+		this.setState(
+			{
+				remainingTime: MAXIMUM_SECONDS,
+				danger: false,
+			},
+			this.startTimer
+		);
+	};
 
 	render() {
 		const { remainingTime, danger } = this.state;

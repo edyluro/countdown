@@ -113,13 +113,6 @@ export default class CountdownGame extends React.Component {
 			fails.push(<Img src={fail} alt="Fail" />);
 		}
 
-		let renderTimer;
-		if (status === GAME_STATUS.START) {
-			renderTimer = null;
-		} else {
-			renderTimer = <Timer timeUpHandler={this.timeUpHandler} />;
-		}
-
 		let renderGameStatus;
 		if (status === GAME_STATUS.WON) {
 			renderGameStatus = (
@@ -143,7 +136,7 @@ export default class CountdownGame extends React.Component {
 
 		return (
 			<CenteredDiv>
-				{renderTimer}
+				<Timer timeUpHandler={this.timeUpHandler} gameStatus={status} />
 				<H2>Create the word by dragging letters into the empty boxes</H2>
 				<H4>You have one minute</H4>
 				{renderBoard}
