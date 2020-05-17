@@ -69,9 +69,13 @@ export default class CountdownGame extends React.Component {
 		this.setState({ status });
 	};
 
+	/* Verifies and updates the status of the game each time a letter is placed. */
 	verifyGuessedWord = (guess) => {
 		const { word, status, tries } = this.state;
+		/* If there are no more empty fields and there is a game in progress
+		 * verify, otherwise it stops the verification. */
 		if (guess.length === WORD_LENGTH && status === GAME_STATUS.PROGRESS) {
+			/* If the word guessed is the same as the answer, otherwise increase the tries by one. */
 			if (guess === word) {
 				this.setGameStatus(GAME_STATUS.WON);
 			} else {

@@ -33,7 +33,7 @@ export default function PieceContainer({
 	frameType,
 	type,
 	disableLetter,
-	onGuessHandler,
+	onPieceMovedHandler,
 }) {
 	const onDragStartHandler = (event) => {
 		if (disableLetter) {
@@ -48,7 +48,7 @@ export default function PieceContainer({
 		const draggedPiece = JSON.parse(event.dataTransfer.getData("text"));
 		if (type === CONTAINER_TYPE.GUESSED) {
 			const guessObject = { from: draggedPiece, to: { id, type } };
-			onGuessHandler(guessObject);
+			onPieceMovedHandler(guessObject);
 		}
 	};
 
@@ -75,12 +75,12 @@ PieceContainer.propTypes = {
 	frameType: PropTypes.string,
 	type: PropTypes.string.isRequired,
 	disableLetter: PropTypes.bool,
-	onGuessHandler: PropTypes.func,
+	onPieceMovedHandler: PropTypes.func,
 };
 
 PieceContainer.defaultProps = {
 	letter: null,
 	frameType: CONTAINER_FRAME_TYPE.PRIMARY,
-	onGuessHandler: null,
+	onPieceMovedHandler: null,
 	disableLetter: false,
 };

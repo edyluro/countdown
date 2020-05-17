@@ -8,6 +8,7 @@ const CenteredDiv = styled.div`
 	text-align: center;
 `;
 
+/* Helper functions to shuffle the correct word together with incorrect letters. */
 function shuffleArray(array) {
 	const a = array.slice();
 	for (let i = a.length - 1; i > 0; i -= 1) {
@@ -46,7 +47,7 @@ export default class Board extends React.Component {
 					this.fillBoard();
 					break;
 				case GAME_STATUS.FAILED:
-					this.resetGuess();
+					this.resetBoard();
 					break;
 				case GAME_STATUS.WON:
 				case GAME_STATUS.LOST:
@@ -58,7 +59,8 @@ export default class Board extends React.Component {
 		}
 	};
 
-	resetGuess = () => {
+	/* Resets all board pieces to original their original position  */
+	resetBoard = () => {
 		const { startGameHandler } = this.props;
 		const { letters: { available, guessed } = {} } = this.state;
 		const newAvailableArray = available.map((piece) => {
@@ -101,6 +103,7 @@ export default class Board extends React.Component {
 		);
 	};
 
+	/* Create a guess from bottom fields and "sends" the guess up to the game */
 	makeGuess = () => {
 		const { verifyGuessedWord } = this.props;
 		const { letters: { guessed } = {} } = this.state;
@@ -178,9 +181,13 @@ export default class Board extends React.Component {
 		return piece;
 	};
 
-	changeStateFromGuess = (pieceFrom, pieceTo) => {
+	/* Receives the piece moved and the container where it was dropped,
+	 * if the move is valid then it updates the board.  */
+	updateBoardPieces = (pieceFrom, pieceTo) => {
+		/* A valid move is only a piece moved to an empty guess space. */
 		if (pieceTo.letter === null) {
 			const { letters: { available, guessed } = {} } = this.state;
+			/* The piece was moved from the available letters into an empty guess space. */
 			if (pieceFrom.type === CONTAINER_TYPE.AVAILABLE) {
 				const newAvailableArray = available.map((piece) => {
 					if (piece.id === pieceFrom.id) {
@@ -209,6 +216,7 @@ export default class Board extends React.Component {
 					}),
 					this.makeGuess
 				);
+				/* The piece was moved from an already guessed letter into an empty guess space. */
 			} else {
 				const newGuessedArray = guessed.map((piece) => {
 					if (piece.id === pieceFrom.id) {
@@ -239,10 +247,10 @@ export default class Board extends React.Component {
 		}
 	};
 
-	onGuessHandler = ({ from, to }) => {
+	onPieceMovedHandler = ({ from, to }) => {
 		const letterPieceFrom = this.getPieceFromId(from);
 		const letterPieceTo = this.getPieceFromId(to);
-		this.changeStateFromGuess(letterPieceFrom, letterPieceTo);
+		this.updateBoardPieces(letterPieceFrom, letterPieceTo);
 	};
 
 	renderPieceContainer = (pieceProps) => {
@@ -252,7 +260,7 @@ export default class Board extends React.Component {
 				key={key}
 				id={id}
 				frameType={frameType}
-				onGuessHandler={this.onGuessHandler}
+				onPieceMovedHandler={this.onPieceMovedHandler}
 				letter={letter}
 				type={type}
 				disableLetter={disableLetter}
