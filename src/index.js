@@ -8,6 +8,9 @@ const theme = {
 	secondary: "#22bcff",
 	primaryPiece: "#009680",
 	secondaryPiece: "#1d305b",
+	primaryFrame: "#343a40",
+	successFrame: "#7bc44c",
+	dangerFrame: "#c52d30",
 };
 
 ReactDOM.render(

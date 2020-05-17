@@ -1,5 +1,11 @@
 /* eslint-disable import/prefer-default-export */
 
+export const CONTAINER_FRAME_TYPE = {
+	PRIMARY: "default",
+	SUCCESS: "danger",
+	DANGER: "success",
+};
+
 export const CONTAINER_TYPE = {
 	AVAILABLE: "available",
 	GUESSED: "guessed",

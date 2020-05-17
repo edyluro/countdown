@@ -33,7 +33,10 @@ export default class Timer extends React.Component {
 		if (gameStatus !== prevProps.gameStatus) {
 			if (gameStatus === GAME_STATUS.START) {
 				this.resetTimer();
-			} else if (gameStatus === GAME_STATUS.WON || gameStatus === GAME_STATUS.LOST) {
+			} else if (
+				gameStatus === GAME_STATUS.WON ||
+				gameStatus === GAME_STATUS.LOST
+			) {
 				this.stopTimer();
 			}
 		}
@@ -92,4 +95,5 @@ export default class Timer extends React.Component {
 
 Timer.propTypes = {
 	timeUpHandler: PropTypes.func.isRequired,
+	gameStatus: PropTypes.string.isRequired,
 };

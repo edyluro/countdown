@@ -2,11 +2,19 @@ import React from "react";
 import styled from "styled-components";
 import PropTypes from "prop-types";
 import LetterPiece from "./LetterPiece";
-import { CONTAINER_TYPE } from "./constants";
+import { CONTAINER_FRAME_TYPE, CONTAINER_TYPE } from "./constants";
 
 const ContainerDiv = styled.div`
 	margin: 10px;
-	border-color: black;
+	border-color: ${(props) => {
+		if (props.type === CONTAINER_FRAME_TYPE.SUCCESS) {
+			return props.theme.successFrame;
+		}
+		if (props.type === CONTAINER_FRAME_TYPE.DANGER) {
+			return props.theme.dangerFrame;
+		}
+		return props.theme.primaryFrame;
+	}};
 	border-style: solid;
 	color: #333;
 	display: inline-block;
@@ -22,6 +30,7 @@ const onDragOver = (event) => {
 export default function PieceContainer({
 	id,
 	letter,
+	frameType,
 	type,
 	disableLetter,
 	onGuessHandler,
@@ -47,6 +56,7 @@ export default function PieceContainer({
 		<ContainerDiv
 			onDragOver={(event) => onDragOver(event)}
 			onDrop={(event) => onDropHandler(event)}
+			type={frameType}
 		>
 			<LetterPiece
 				letter={letter}
@@ -62,6 +72,7 @@ export default function PieceContainer({
 PieceContainer.propTypes = {
 	id: PropTypes.string.isRequired,
 	letter: PropTypes.string,
+	frameType: PropTypes.string,
 	type: PropTypes.string.isRequired,
 	disableLetter: PropTypes.bool,
 	onGuessHandler: PropTypes.func,
@@ -69,6 +80,7 @@ PieceContainer.propTypes = {
 
 PieceContainer.defaultProps = {
 	letter: null,
+	frameType: CONTAINER_FRAME_TYPE.PRIMARY,
 	onGuessHandler: null,
 	disableLetter: false,
 };

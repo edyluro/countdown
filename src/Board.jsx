@@ -2,7 +2,7 @@ import React from "react";
 import styled from "styled-components";
 import PropTypes from "prop-types";
 import PieceContainer from "./PieceContainer";
-import { CONTAINER_TYPE, GAME_STATUS } from "./constants";
+import { CONTAINER_FRAME_TYPE, CONTAINER_TYPE, GAME_STATUS } from "./constants";
 
 const CenteredDiv = styled.div`
 	text-align: center;
@@ -38,12 +38,23 @@ export default class Board extends React.Component {
 		this.fillBoard();
 	}
 
-	componentDidUpdate = () => {
+	componentDidUpdate = (prevProps) => {
 		const { gameStatus } = this.props;
-		if (gameStatus === GAME_STATUS.START) {
-			this.fillBoard();
-		} else if (gameStatus === GAME_STATUS.FAILED) {
-			this.resetGuess();
+		if (prevProps.gameStatus !== gameStatus) {
+			switch (gameStatus) {
+				case GAME_STATUS.START:
+					this.fillBoard();
+					break;
+				case GAME_STATUS.FAILED:
+					this.resetGuess();
+					break;
+				case GAME_STATUS.WON:
+				case GAME_STATUS.LOST:
+					this.colorContainers();
+					break;
+				default:
+					break;
+			}
 		}
 	};
 
@@ -100,6 +111,29 @@ export default class Board extends React.Component {
 		verifyGuessedWord(guessedWord);
 	};
 
+	colorContainers = () => {
+		const { wordToGuess, wordLength } = this.props;
+		const { letters: { guessed } = {} } = this.state;
+		const newGuessedArray = [];
+		for (let i = 0; i < wordLength; i += 1) {
+			let frameType = CONTAINER_FRAME_TYPE.PRIMARY;
+			const piece = guessed[i];
+			if (wordToGuess[i] === piece.letter) {
+				frameType = CONTAINER_FRAME_TYPE.SUCCESS;
+			} else if (piece.letter !== null) {
+				frameType = CONTAINER_FRAME_TYPE.DANGER;
+			}
+			const newPiece = { ...piece, frameType };
+			newGuessedArray.push(newPiece);
+		}
+		this.setState((prevState) => ({
+			letters: {
+				...prevState.letters,
+				guessed: newGuessedArray,
+			},
+		}));
+	};
+
 	createAvailableArray = (letterArray) => {
 		const availableArray = [];
 		letterArray.forEach((letter, index) => {
@@ -123,6 +157,7 @@ export default class Board extends React.Component {
 			guessedArray.push({
 				key: uniqueKey,
 				id: uniqueKey,
+				frameType: CONTAINER_FRAME_TYPE.PRIMARY,
 				letterParentId: null,
 				letter: null,
 				type: CONTAINER_TYPE.GUESSED,
@@ -211,11 +246,12 @@ export default class Board extends React.Component {
 	};
 
 	renderPieceContainer = (pieceProps) => {
-		const { key, id, letter, type, disableLetter } = pieceProps;
+		const { key, id, frameType, letter, type, disableLetter } = pieceProps;
 		return (
 			<PieceContainer
 				key={key}
 				id={id}
+				frameType={frameType}
 				onGuessHandler={this.onGuessHandler}
 				letter={letter}
 				type={type}
