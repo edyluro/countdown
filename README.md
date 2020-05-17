@@ -1,46 +1,49 @@
-Clone of the famous [“​Countdown​” TV](https://en.wikipedia.org/wiki/Countdown_(game_show)) game show with one key difference: In Countdown, there may be several correct words, but in this game, there is only one.
-## Game
+# Countdown
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+Word guessing game, clone of the famous [“​Countdown​” TV](https://en.wikipedia.org/wiki/Countdown_(game_show)) game show with one key difference: In Countdown, there may be several correct words, but in this game, there is only one.
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+## Game Definition
 
+### Gameplay:
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+Drag the available letters to to the empty fields to try to guess the correct word.
+
+### Rules:
+
+* The correct word is randomly selected.
+* 9 letters are displayed (both correct and incorrect) shuffled.
+* The player should drag and drop the letters into the empty fields.
+* The player has 1 minute to complete the word.
+* Once dropped in an empty field, a letter cannot return to its original place, but it can be moved to a different empty field.
+* The player fails when they select the wrong letters or if they are ordered incorrectly.
+* On fail, the board is reset but the timer continues.
+* The player lose by either running out of time or by failing 3 times.
+* If they lose, they see a fail message and an option to try again with a different word.
+
+#### How to win:
+
+* The only way to win is to spell the correct word within the time limit.
+
+## Project Specifications
+
+The project was coded in Javascript using [React.js](https://reactjs.org/)
+For styling the library [Styled Component](https://styled-components.com/) was used.
+The project follows the [Airbnb React/JSX Style Guide](https://github.com/airbnb/javascript/tree/master/react) for development conventions.
+
+### Word Algorithm
+
+The word algorithm to enforce only one correct answer within the dictionary and to select extra wrong letters, is based on the "On the Subject of Passwords" module's defuse instructions in the Bomb Defusal Manual v.1 from the game **Keep Talking and Nobody Explodes**.
+
+For more information visit [https://keeptalkinggame.com/](https://keeptalkinggame.com/)
 
 ## Available Scripts
 
-In the project directory, you can run:
+In the project directory, you can run the project in development mode using:
 
 ### `npm start`
 
-Runs the app in the development mode.<br />
+Do not forget to install dependencies before by using:
+
+### `npm install`
+
 Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
-
-The page will reload if you make edits.<br />
-You will also see any lint errors in the console.
-
-### `npm test`
-
-Launches the test runner in the interactive watch mode.<br />
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
-
-### `npm run build`
-
-Builds the app for production to the `build` folder.<br />
-It correctly bundles React in production mode and optimizes the build for the best performance.
-
-The build is minified and the filenames include the hashes.<br />
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
-
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
