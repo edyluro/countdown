@@ -27,7 +27,9 @@ Drag the available letters to to the empty fields to try to guess the correct wo
 ## Project Specifications
 
 The project was coded in Javascript using [React.js](https://reactjs.org/)
+
 For styling the library [Styled Component](https://styled-components.com/) was used.
+
 The project follows the [Airbnb React/JSX Style Guide](https://github.com/airbnb/javascript/tree/master/react) for development conventions.
 
 ### Word Algorithm
